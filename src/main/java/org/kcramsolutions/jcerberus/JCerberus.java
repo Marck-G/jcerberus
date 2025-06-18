@@ -15,7 +15,7 @@ public class JCerberus {
   private String symmestricKeyPath;
 
 
-  private JCerberus(String pubKeyPath, String privKeyPath, String symmestricKeyPath) {
+  public JCerberus(String pubKeyPath, String privKeyPath, String symmestricKeyPath) {
     this.privateKeyPath = privKeyPath;
     this.publicKeyPath = pubKeyPath;
     this.symmestricKeyPath = symmestricKeyPath;
