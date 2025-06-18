@@ -1,0 +1,77 @@
+name: Maven release
+on:
+  push:
+    tags:
+      - 'release/*' # Dispara el workflow cuando se empuja un tag que comienza con 'release/'
+  workflow_dispatch: # Permite disparar el workflow manualmente desde la interfaz de GitHub
+
+jobs:
+  build:
+    name: Build with Maven
+    runs-on: ubuntu-latest # Normalmente, un solo sistema operativo es suficiente para compilar Java/Maven
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17' # Puedes cambiar la versión de JDK según tu proyecto
+        distribution: 'temurin'
+        cache: 'maven' # Habilita el caché de Maven para dependencias
+
+    - name: Build with Maven
+      run: mvn -B package -DskipTests --file pom.xml # Compila el proyecto y empaqueta los artefactos
+
+    - name: List generated files (for debugging)
+      run: ls -R target/
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: maven-project-artifacts
+        # Ajusta estas rutas a los JAR/WAR que genera tu proyecto.
+        # Por ejemplo, si tu proyecto se llama 'my-app' y genera un JAR:
+        path: |
+          target/*.jar
+
+  create-release:
+    name: Create GitHub Release
+    needs: build # Este job depende de que el job 'build' haya terminado exitosamente
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/release/') # Solo se ejecuta si el workflow fue disparado por un tag 'release/*'
+
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: List downloaded artifacts
+      run: ls -R artifacts
+
+    - name: Get version from tag
+      id: get_version
+      run: |
+        TAG_REF="${GITHUB_REF}"
+        # Extrae la parte de la etiqueta (ej. release/1.0.0)
+        TAG_NAME="${TAG_REF#refs/tags/}"
+        # Extrae solo la versión (ej. 1.0.0)
+        VERSION="${TAG_NAME#release/}"
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref }} # Usamos la referencia completa del tag como tag_name
+        name: Release ${{ steps.get_version.outputs.VERSION }} # Usamos solo la versión para el nombre del release
+        body: |
+          🎉 ¡Nueva versión disponible: ${{ steps.get_version.outputs.VERSION }}! 🎉
+
+          Aquí están los artefactos de tu proyecto Maven:
+        # Asegúrate de que los archivos listados aquí coincidan con los que subiste en el job 'build'
+        files: |
+          artifacts/maven-project-artifacts/*.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
