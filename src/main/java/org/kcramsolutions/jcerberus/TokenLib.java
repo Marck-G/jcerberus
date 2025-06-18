@@ -11,7 +11,11 @@ import java.nio.file.StandardCopyOption;
 
 public class TokenLib {
 static {
-        System.loadLibrary("libcerberus"); // Cargar libtokenlib.so (Linux), tokenlib.dll (Windows)
+        try {
+            loadNativeLibrary();
+        } catch (IOException e) {
+            throw new RuntimeException("Error cargando la librería nativa: " + e.getMessage(), e);
+        } 
     }
 
     private static void loadNativeLibrary() throws IOException {

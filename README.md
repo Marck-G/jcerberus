@@ -76,4 +76,4 @@ if (standardToken.verify(token)) {
     System.out.println("Payload: " + data.getPayload());
 }
 ```
-You can extend or customize the Headers and Token inner classes as needed.
+You can extend or customize the Headers and Token inner classes as needed.file:///home/mguzman/Projects/katalyst/agrocs-java/cerberus/LICENSE
