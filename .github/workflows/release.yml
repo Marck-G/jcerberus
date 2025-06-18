@@ -17,7 +17,7 @@ jobs:
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '17' # Puedes cambiar la versión de JDK según tu proyecto
+        java-version: '21' # Puedes cambiar la versión de JDK según tu proyecto
         distribution: 'temurin'
         cache: 'maven' # Habilita el caché de Maven para dependencias
 
