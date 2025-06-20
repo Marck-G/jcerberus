@@ -1,5 +1,9 @@
 # JCerberus
 
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Flag_of_Ecuador.svg/20px-Flag_of_Ecuador.svg.png)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Spain.svg/20px-Flag_of_Spain.svg.png)
+
+
 ## Overview
 `JCerberus` is a Java wrapper library for the Rust-based `cerberus` token management system. It provides native methods to create, verify, and extract secure tokens similar to JWT but with added symmetric encryption and compression for enhanced security and smaller token size.
 
