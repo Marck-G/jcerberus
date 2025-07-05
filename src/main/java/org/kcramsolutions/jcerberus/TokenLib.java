@@ -29,8 +29,8 @@ static {
         String libPath;
         if (os.contains("win")) {
             libPath = "/lib/libcerberus.dll";
-        // } else if (os.contains("mac")) {
-        //     libPath = "/lib/libcerberus.dylib";
+        } else if (os.contains("mac")) {
+            libPath = "/lib/libcerberus.dylib";
         } 
         else {
             logger.info("Linux system");

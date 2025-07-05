@@ -1,5 +1,8 @@
 package org.kcramsolutions.jcerberus;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.kcramsolutions.jcerberus.exceptions.TokenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,16 @@ public class JCerberus {
     this.publicKeyPath = pubKeyPath;
     this.symmestricKeyPath = symmestricKeyPath;
     mapper.registerModule(new JavaTimeModule());
+  }
+
+  public boolean testPaths() {
+    boolean priv = Files.exists(Paths.get(privateKeyPath));
+    boolean pub = Files.exists(Paths.get(publicKeyPath));
+    boolean key = Files.exists(Paths.get(symmestricKeyPath));
+    logger.info("Private key found: {}", priv);
+    logger.info("Public key found: {}", pub);
+    logger.info("RSA key found: {}", key);
+    return priv && pub && key;
   }
   
 
